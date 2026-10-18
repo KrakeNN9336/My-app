@@ -1,36 +1,48 @@
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
 import { VitePWA } from 'vite-plugin-pwa';
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), VitePWA({
-    registerType: 'prompt',
-    injectRegister: false,
-
-    pwaAssets: {
-      disabled: false,
-      config: true,
-    },
-
-    manifest: {
-      name: 'my-app',
-      short_name: 'my-app',
-      description: 'my-app',
-      theme_color: '#ffffff',
-    },
-
-    workbox: {
-      globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
-      cleanupOutdatedCaches: true,
-      clientsClaim: true,
-    },
-
-    devOptions: {
-      enabled: false,
-      navigateFallback: 'index.html',
-      suppressWarnings: true,
-      type: 'module',
-    },
-  })],
-})
+  plugins: [
+    vue(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      manifest: {
+        name: 'TaskFlow',
+        short_name: 'TaskFlow',
+        description: 'PWA-менеджер завдань',
+        start_url: '/',
+        scope: '/',
+        display: 'standalone',
+        background_color: '#f5f7fb',
+        theme_color: '#2563eb',
+        lang: 'uk',
+        icons: [
+          {
+            src: '/icons/icon-192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'any',
+          },
+          {
+            src: '/icons/icon-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable',
+          },
+        ],
+      },
+      workbox: {
+        navigateFallback: '/index.html',
+        globPatterns: [
+          '**/*.{html,js,css,png,svg,ico,woff2}',
+        ],
+        cleanupOutdatedCaches: true,
+      },
+    }),
+  ],
+  server: {
+    host: '0.0.0.0',
+    port: 5173,
+  },
+});

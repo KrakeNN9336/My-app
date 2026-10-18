@@ -23,3 +23,10 @@ dev-dist
 *.njsproj
 *.sln
 *.sw?
+
+# Secrets and Cloudflare
+.env
+.env.*
+!.env.example
+.dev.vars*
+.wrangler/

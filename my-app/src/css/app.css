@@ -10,9 +10,10 @@
 .page-heading h1 { margin: 0 0 6px; font-size: 26px; font-weight: 700; }
 .page-heading p { margin: 0; font-size: 14px; color: var(--f7-text-color-secondary, #64748b); }
 
-.stats-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 28px; }
+.stats-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 28px; }
 .stat-card { padding: 20px; border-radius: var(--taskflow-radius); background: #eff6ff; color: #1d4ed8; }
 .stat-card-success { background: #ecfdf5; color: #047857; }
+.stat-card-pending { background: #fffbeb; color: #b45309; }
 .stat-card .icon { font-size: 24px; }
 .stat-value { margin-top: 14px; font-size: 30px; font-weight: 700; }
 .stat-label { margin-top: 4px; font-size: 13px; }
@@ -51,7 +52,8 @@
 .app-tabbar .app-link-active { color: var(--taskflow-primary); }
 @media (max-width: 360px) {
   .app-content { padding: 16px 12px 90px; }
-  .stat-card { padding: 14px; }
+  .stat-card { padding: 12px; }
+  .stat-label { font-size: 11px; }
   .stat-value { font-size: 26px; }
   .app-tab-label { font-size: 10px; }
 }

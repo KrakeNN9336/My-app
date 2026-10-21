@@ -8,7 +8,7 @@
   letter-spacing: 1.5px; text-transform: uppercase; }
 .tf3-hero h1 { margin: 12px 0; color: #fff; font-size: 29px; }
 .tf3-hero p { margin: 0; color: #adbed3; line-height: 1.6; }
-.tf3-stat-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr));
+.tf3-stat-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr));
   gap: 14px; margin-top: 18px; }
 .tf3-stat { display: flex; flex-direction: column; gap: 10px; padding: 22px;
   border: 1px solid #263a52; border-radius: 14px; background: #142237; }
@@ -72,13 +72,30 @@
   border-radius: 9px; color: #bcd0e9; font-size: 12px; }
 .tf3-empty { padding: 30px; border: 1px dashed #38516d;
   border-radius: 12px; color: #aebfd4; text-align: center; }
+/* Додаткові завдання: прогрес, вибір картки, сортування */
+.tf3-progress { margin-top: 14px; padding: 18px 22px; border: 1px solid #263a52;
+  border-radius: 14px; background: #142237; }
+.tf3-progress-head { display: flex; justify-content: space-between;
+  align-items: baseline; color: #aabed5; font-size: 13px; }
+.tf3-progress-head strong { color: #fff; font-size: 22px; }
+.tf3-progress-track { height: 10px; margin-top: 12px; overflow: hidden;
+  border-radius: 6px; background: #20344b; }
+.tf3-progress-bar { height: 100%; border-radius: 6px;
+  background: linear-gradient(90deg,#12a0d6,#35d0a0); transition: width .3s; }
+.tf3-card-body { cursor: pointer; border-radius: 10px; }
+.tf3-card-body:focus-visible { outline: 2px solid #7fe0ff; outline-offset: 4px; }
+.tf3-task-card--selected { border-color: #35b4e5; box-shadow: 0 0 0 2px #35b4e5; }
+.tf3-selected { display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  margin-bottom: 16px; padding: 12px 16px; border: 1px solid #35b4e5;
+  border-radius: 12px; background: #10324a; color: #d9ecfb; font-size: 14px; }
+.tf3-selected strong { color: #fff; }
 @media (max-width: 740px) {
   .tf3-task-grid { grid-template-columns: 1fr; }
   .tf3-hero { padding: 20px; }
   .tf3-hero h1 { font-size: 24px; }
 }
 @media (max-width: 520px) {
-  .tf3-stat-grid { gap: 8px; }
+  .tf3-stat-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
   .tf3-stat { padding: 12px; }
   .tf3-stat strong { font-size: 25px; }
   .tf3-stat-label { font-size: 11px; }

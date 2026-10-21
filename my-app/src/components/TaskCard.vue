@@ -2,8 +2,11 @@
 import { computed } from 'vue'
 import StatusBadge from './StatusBadge.vue'
 import PriorityBadge from './PriorityBadge.vue'
-const props = defineProps({ task: { type: Object, required: true } })
-const emit = defineEmits(['status-change', 'priority-change'])
+const props = defineProps({
+  task: { type: Object, required: true },
+  selected: { type: Boolean, default: false },
+})
+const emit = defineEmits(['status-change', 'priority-change', 'task-select'])
 const statusSequence = ['todo', 'progress', 'done']
 const prioritySequence = ['low', 'medium', 'high']
 const statusActionText = computed(() => ({
@@ -18,6 +21,9 @@ const formattedDate = computed(() => {
     day: '2-digit', month: 'long', year: 'numeric',
   }).format(date)
 })
+function selectTask() {
+  emit('task-select', { id: props.task.id })
+}
 function changeStatus() {
   const index = statusSequence.indexOf(props.task.status)
   emit('status-change', {
@@ -34,13 +40,17 @@ function changePriority() {
 }
 </script>
 <template>
-  <f7-card class="tf3-task-card">
+  <f7-card class="tf3-task-card" :class="{ 'tf3-task-card--selected': selected }">
     <f7-card-content>
-      <div class="tf3-card-heading">
-        <h3 class="tf3-card-title">{{ task.title }}</h3>
-        <StatusBadge :status="task.status" />
+      <div class="tf3-card-body" role="button" tabindex="0"
+        :aria-pressed="selected" @click="selectTask"
+        @keydown.enter="selectTask" @keydown.space.prevent="selectTask">
+        <div class="tf3-card-heading">
+          <h3 class="tf3-card-title">{{ task.title }}</h3>
+          <StatusBadge :status="task.status" />
+        </div>
+        <p class="tf3-card-description">{{ task.description }}</p>
       </div>
-      <p class="tf3-card-description">{{ task.description }}</p>
       <div class="tf3-card-meta">
         <div class="tf3-meta-item">
           <span class="tf3-meta-label">Пріоритет:</span>

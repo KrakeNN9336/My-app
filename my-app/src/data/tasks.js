@@ -5,5 +5,9 @@ export const tasks = [
   { id: 4, title: 'Реалізувати фільтрацію завдань', description: 'Додати фільтри за статусом і пріоритетом.', status: 'todo', priority: 'medium', dueDate: '2026-10-27' },
   { id: 5, title: 'Створити адаптивний інтерфейс', description: 'Налаштувати вигляд на різних екранах.', status: 'progress', priority: 'low', dueDate: '2026-10-29' },
   { id: 6, title: 'Підготувати структуру PWA', description: 'Налаштувати початковий проєкт.', status: 'done', priority: 'low', dueDate: '2026-10-30' },
+  { id: 7, title: 'Підготувати звіт до роботи', description: 'Оформити результати практичної роботи.', status: 'progress', priority: 'medium', dueDate: '2026-11-01' },
+  { id: 8, title: 'Перевірити доступність інтерфейсу', description: 'Перевірити контраст і керування клавіатурою.', status: 'todo', priority: 'low', dueDate: '2026-11-02' },
+  { id: 9, title: 'Опублікувати застосунок', description: 'Виконати git push і перевірити Cloudflare.', status: 'done', priority: 'high', dueDate: '2026-11-03' },
+  { id: 10, title: 'Налаштувати сортування завдань', description: 'Додати сортування за рівнем пріоритету.', status: 'todo', priority: 'high', dueDate: '2026-11-04' },
 ]
 export default tasks

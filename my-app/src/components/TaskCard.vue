@@ -2,17 +2,27 @@
 import { computed } from 'vue'
 import StatusBadge from './StatusBadge.vue'
 import PriorityBadge from './PriorityBadge.vue'
+
 const props = defineProps({
   task: { type: Object, required: true },
-  selected: { type: Boolean, default: false },
+  editable: { type: Boolean, default: false },
+  selected: { type: Boolean, default: false }, // з КП 2/5 (додаткове завдання 5)
 })
-const emit = defineEmits(['status-change', 'priority-change', 'task-select'])
+const emit = defineEmits(['status-change', 'priority-change', 'edit', 'task-select'])
+
+// Додаткове завдання 1: підпис категорії для картки
+const categoryLabels = { study: 'Навчання', work: 'Робота', personal: 'Особисте' }
+const categoryText = computed(() => categoryLabels[props.task.category] || '')
+
 const statusSequence = ['todo', 'progress', 'done']
 const prioritySequence = ['low', 'medium', 'high']
+
 const statusActionText = computed(() => ({
-  todo: 'Взяти в роботу', progress: 'Завершити',
+  todo: 'Взяти в роботу',
+  progress: 'Завершити',
   done: 'Повернути в план',
 })[props.task.status] || 'Змінити статус')
+
 const formattedDate = computed(() => {
   if (!props.task.dueDate) return 'Без терміну'
   const date = new Date(`${props.task.dueDate}T12:00:00`)
@@ -21,9 +31,7 @@ const formattedDate = computed(() => {
     day: '2-digit', month: 'long', year: 'numeric',
   }).format(date)
 })
-function selectTask() {
-  emit('task-select', { id: props.task.id })
-}
+
 function changeStatus() {
   const index = statusSequence.indexOf(props.task.status)
   emit('status-change', {
@@ -31,6 +39,7 @@ function changeStatus() {
     status: statusSequence[(index + 1) % statusSequence.length],
   })
 }
+
 function changePriority() {
   const index = prioritySequence.indexOf(props.task.priority)
   emit('priority-change', {
@@ -38,7 +47,13 @@ function changePriority() {
     priority: prioritySequence[(index + 1) % prioritySequence.length],
   })
 }
+
+// з КП 2/5: вибір завдання кліком по картці
+function selectTask() {
+  emit('task-select', { id: props.task.id })
+}
 </script>
+
 <template>
   <f7-card class="tf3-task-card" :class="{ 'tf3-task-card--selected': selected }">
     <f7-card-content>
@@ -50,6 +65,8 @@ function changePriority() {
           <StatusBadge :status="task.status" />
         </div>
         <p class="tf3-card-description">{{ task.description }}</p>
+        <!-- Додаткове завдання 1 -->
+        <p v-if="categoryText" class="tf4-card-category">Категорія: <strong>{{ categoryText }}</strong></p>
       </div>
       <div class="tf3-card-meta">
         <div class="tf3-meta-item">
@@ -63,6 +80,8 @@ function changePriority() {
           @click="changeStatus">{{ statusActionText }}</button>
         <button type="button" class="tf3-action"
           @click="changePriority">Змінити пріоритет</button>
+        <button v-if="editable" type="button" class="tf3-action"
+          @click="emit('edit', task.id)">Редагувати</button>
       </div>
     </f7-card-content>
   </f7-card>

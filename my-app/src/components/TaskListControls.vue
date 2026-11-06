@@ -3,16 +3,19 @@ defineProps({
   search: { type: String, default: '' },
   status: { type: String, default: 'all' },
   priority: { type: String, default: 'all' },
+  project: { type: String, default: 'all' },
   sort: { type: String, default: 'newest' },
-  onlyActive: { type: Boolean, default: false }, // Додаткове завдання 1
+  onlyNoDueDate: { type: Boolean, default: false }, // Додаткове завдання 5
+  projects: { type: Array, required: true },
 })
 
 const emit = defineEmits([
   'update:search',
   'update:status',
   'update:priority',
+  'update:project',
   'update:sort',
-  'update:onlyActive', // Додаткове завдання 1
+  'update:onlyNoDueDate', // Додаткове завдання 5
   'reset',
 ])
 </script>
@@ -20,7 +23,6 @@ const emit = defineEmits([
 <template>
   <section class="tf5-panel" aria-label="Пошук і фільтри">
     <h2>Пошук і впорядкування</h2>
-
     <div class="tf5-controls-grid">
       <label class="tf5-search">
         Пошук за назвою та описом
@@ -31,17 +33,6 @@ const emit = defineEmits([
           @input="emit('update:search', $event.target.value)"
         />
       </label>
-
-      <!-- Додаткове завдання 4: кнопка видима лише за непорожнього тексту пошуку -->
-      <button
-        v-if="search"
-        type="button"
-        class="tf5-btn tf5-clear"
-        @click="emit('update:search', '')"
-      >
-        Очистити пошук
-      </button>
-
       <label>
         Статус
         <select :value="status" @change="emit('update:status', $event.target.value)">
@@ -51,7 +42,6 @@ const emit = defineEmits([
           <option value="done">Виконано</option>
         </select>
       </label>
-
       <label>
         Пріоритет
         <select :value="priority" @change="emit('update:priority', $event.target.value)">
@@ -61,7 +51,15 @@ const emit = defineEmits([
           <option value="high">Високий</option>
         </select>
       </label>
-
+      <label>
+        Проєкт
+        <select :value="project" @change="emit('update:project', $event.target.value)">
+          <option value="all">Усі проєкти</option>
+          <option v-for="item in projects" :key="item.id" :value="item.id">
+            {{ item.title }}
+          </option>
+        </select>
+      </label>
       <label>
         Сортування
         <select :value="sort" @change="emit('update:sort', $event.target.value)">
@@ -69,24 +67,19 @@ const emit = defineEmits([
           <option value="title">За назвою (А–Я)</option>
           <option value="priority">За пріоритетом (високий перший)</option>
           <option value="dueDate">За терміном (найближчий перший)</option>
-          <!-- Додаткове завдання 6 -->
-          <option value="dueDateDesc">За терміном (найдальший перший)</option>
-          <!-- Додаткове завдання 2 -->
-          <option value="status">За статусом (У роботі → Заплановано → Виконано)</option>
         </select>
       </label>
     </div>
-
     <div class="tf5-actions">
-      <!-- Додаткове завдання 1: швидкий фільтр «Тільки невиконані» -->
+      <!-- Додаткове завдання 5: фільтр «Лише без терміну» -->
       <button
         type="button"
         class="tf5-btn"
-        :class="{ 'tf5-btn--primary': onlyActive }"
-        :aria-pressed="onlyActive"
-        @click="emit('update:onlyActive', !onlyActive)"
+        :class="{ 'tf5-btn--primary': onlyNoDueDate }"
+        :aria-pressed="onlyNoDueDate"
+        @click="emit('update:onlyNoDueDate', !onlyNoDueDate)"
       >
-        Тільки невиконані
+        Лише без терміну
       </button>
 
       <button type="button" class="tf5-btn" @click="emit('reset')">

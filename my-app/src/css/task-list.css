@@ -1,5 +1,4 @@
-/* Практична робота № 5. Доповнення до наявних стилів TaskFlow. */
-
+/* Практичні роботи № 5–6. Оформлення форм, фільтрів і проєктів. */
 .tf5-panel {
   margin: 22px 0;
   padding: 20px;
@@ -29,7 +28,8 @@
 }
 
 .tf5-form label,
-.tf5-controls-grid label {
+.tf5-controls-grid label,
+.tf6-project-form label {
   display: grid;
   gap: 7px;
   color: #d7e4f5;
@@ -41,7 +41,8 @@
 .tf5-form textarea,
 .tf5-form select,
 .tf5-controls-grid input,
-.tf5-controls-grid select {
+.tf5-controls-grid select,
+.tf6-project-form input {
   box-sizing: border-box;
   display: block;
   width: 100%;
@@ -58,7 +59,6 @@
 }
 
 .tf5-form textarea { resize: vertical; }
-
 .tf5-search { grid-column: 1 / -1; }
 
 .tf5-actions,
@@ -89,11 +89,10 @@
 }
 
 .tf5-btn:hover { filter: brightness(1.12); }
-
 .tf5-new { margin-top: 18px; }
 
 .tf5-error {
-  margin: 0;
+  margin: 10px 0 0;
   padding: 10px 12px;
   border: 1px solid #d26d6d;
   border-radius: 8px;
@@ -114,18 +113,77 @@
   color: #dae7f6;
 }
 
+/* Нові стилі роботи № 6: централізоване керування проєктами. */
+.tf6-project-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.tf6-project-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 12px;
+  border: 1px solid #385a7a;
+  border-radius: 12px;
+  background: #1a344f;
+  color: #e4f2ff;
+  font-size: 13px;
+}
+
+.tf6-project-pill strong {
+  min-width: 20px;
+  text-align: center;
+  color: #71d7ff;
+}
+
+.tf6-project-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 12px;
+  max-width: 620px;
+}
+
 @media (max-width: 680px) {
   .tf5-form-grid,
-  .tf5-controls-grid { grid-template-columns: 1fr; }
-
+  .tf5-controls-grid,
+  .tf6-project-form {
+    grid-template-columns: 1fr;
+  }
   .tf5-panel { padding: 16px; }
   .tf5-search { grid-column: auto; }
 }
 
-/* Додаткові завдання (1, 3, 4, 5) */
-.tf5-clear { grid-column: 1 / -1; justify-self: start; }
-.tf5-percent { margin-left: 4px; color: #9fe3c0; font-weight: 700; }
-.tf5-empty--all p { margin: 0 0 12px; }
-.tf5-empty--all { border-color: #d4a24c; }
+/* Додаткові завдання (КП 2/9) */
 .tf5-actions > .tf5-btn { width: auto; flex: 0 0 auto; }
 .tf5-controls-grid + .tf5-actions { margin-top: 16px; }
+.tf5-btn:disabled { opacity: 0.5; cursor: not-allowed; filter: none; }
+.tf6-bulk {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+.tf6-bulk .tf5-btn { width: auto; flex: 0 0 auto; }
+.tf6-hint { color: #9fb4cc; font-size: 13px; }
+.tf6-home-projects {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px;
+}
+.tf6-home-project {
+  padding: 16px;
+  border: 1px solid #28435f;
+  border-radius: 14px;
+  background: #13243a;
+  color: #e4f2ff;
+}
+.tf6-home-project-title { font-weight: 700; font-size: 16px; color: #ffffff; }
+.tf6-home-project-meta { margin-top: 6px; font-size: 13px; color: #aabed5; }
+.tf6-home-project-meta strong { color: #71d7ff; }
+.tf6-bar { height: 6px; margin-top: 12px; border-radius: 999px; background: #22374f; overflow: hidden; }
+.tf6-bar span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #22a6d6, #34d3a0); }

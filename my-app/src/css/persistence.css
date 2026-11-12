@@ -23,7 +23,30 @@
   background: #482938;
 }
 
+/* Додаткові завдання 4 і 6: час збереження та повідомлення синхронізації. */
+.tf7-persistence small {
+  flex-basis: 100%;
+  color: #9fc1e0;
+  font-size: 13px;
+}
+
+/* Додаткові завдання 1–2: панель експорту та імпорту JSON. */
+.tf7-transfer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+}
+
+.tf7-transfer .tf5-btn,
+.tf7-settings-head .tf5-btn { width: auto; flex: 0 0 auto; }
+.tf7-transfer input[type='file'] { display: none; }
+.tf7-transfer-message { flex-basis: 100%; margin: 0; font-size: 14px; color: #9fe0c8; }
+.tf7-transfer-errors { flex-basis: 100%; margin: 0; padding-left: 20px; font-size: 13px; color: #ffb4bf; }
+
 @media (max-width: 680px) {
   .tf7-persistence { align-items: flex-start; flex-direction: column; }
   .tf7-persistence span { flex-basis: auto; }
+  .tf7-persistence small { flex-basis: auto; }
 }

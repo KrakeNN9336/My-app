@@ -8,6 +8,7 @@ import TaskListControls from '../components/TaskListControls.vue'
 import { useTasksStore } from '../store/tasks'
 import { useProjectsStore } from '../store/projects'
 import { persistenceState, retrySave } from '../services/persistence'
+import { buildExport, downloadJson, validateImport } from '../services/transfer'
 import '../css/task-components.css'
 import '../css/task-list.css'
 import '../css/persistence.css'
@@ -47,6 +48,67 @@ const saveMessage = computed(() => {
   if (persistenceState.status === 'saved') return 'Усі зміни збережено в цьому браузері.'
   return persistenceState.error || 'Помилка локального збереження.'
 })
+
+// Додаткове завдання 4: дата й час останнього успішного збереження (metadata.lastSavedAt).
+const lastSavedText = computed(() => persistenceState.lastSavedAt
+  ? persistenceState.lastSavedAt.toLocaleString('uk-UA', { dateStyle: 'long', timeStyle: 'medium' })
+  : '')
+
+// Додаткові завдання 1–2: експорт та імпорт JSON.
+const importInput = ref(null)
+const transferMessage = ref('')
+const importErrors = ref([])
+
+function exportJson() {
+  const data = buildExport(tasks.value, projects.value)
+  downloadJson(data)
+  importErrors.value = []
+  transferMessage.value = `Експортовано: завдань ${data.tasks.length}, проєктів ${data.projects.length}.`
+}
+
+async function importJson(event) {
+  const file = event.target.files?.[0]
+  event.target.value = ''
+  if (!file) return
+  transferMessage.value = ''
+  importErrors.value = []
+
+  let raw
+  try {
+    raw = JSON.parse(await file.text())
+  } catch {
+    importErrors.value = ['Файл не є коректним JSON.']
+    return
+  }
+
+  const result = validateImport(raw)
+  if (!result.ok) {
+    importErrors.value = result.errors.slice(0, 6)
+    if (result.errors.length > 6) importErrors.value.push(`…ще помилок: ${result.errors.length - 6}`)
+    return
+  }
+
+  const { tasks: newTasks, projects: newProjects } = result.data
+  const question = `Замінити поточні дані (${tasks.value.length} завдань, ${projects.value.length} проєктів) `
+    + `даними з файлу (${newTasks.length} завдань, ${newProjects.length} проєктів)?`
+  if (!window.confirm(question)) {
+    transferMessage.value = 'Імпорт скасовано, дані не змінено.'
+    return
+  }
+
+  const maxProjectNumber = Math.max(0, ...newProjects.map((project) => {
+    const match = /^project-(\d+)$/.exec(project.id)
+    return match ? Number(match[1]) : 0
+  }))
+  projectStore.$patch({
+    projects: newProjects,
+    nextProjectId: Math.max(projectStore.nextProjectId, maxProjectNumber + 1),
+  })
+  taskStore.$patch({ tasks: newTasks })
+  taskStore.resetFilters()
+  cancelForm()
+  transferMessage.value = `Імпортовано: завдань ${newTasks.length}, проєктів ${newProjects.length}.`
+}
 
 function startCreate() {
   editingId.value = null
@@ -137,6 +199,19 @@ function createProject() {
         >
           Повторити збереження
         </button>
+        <small v-if="lastSavedText">Останнє збереження: {{ lastSavedText }}</small>
+        <small v-if="persistenceState.syncNotice">{{ persistenceState.syncNotice }}</small>
+      </section>
+
+      <!-- Додаткові завдання 1–2: експорт та імпорт JSON -->
+      <section class="tf7-transfer" aria-label="Експорт та імпорт">
+        <button type="button" class="tf5-btn" @click="exportJson">Експорт JSON</button>
+        <button type="button" class="tf5-btn" @click="importInput.click()">Імпорт JSON</button>
+        <input ref="importInput" type="file" accept="application/json,.json" @change="importJson" />
+        <p v-if="transferMessage" class="tf7-transfer-message" role="status">{{ transferMessage }}</p>
+        <ul v-if="importErrors.length" class="tf7-transfer-errors" role="alert">
+          <li v-for="error in importErrors" :key="error">{{ error }}</li>
+        </ul>
       </section>
 
       <section class="tf5-panel tf6-project-panel" aria-label="Проєкти">

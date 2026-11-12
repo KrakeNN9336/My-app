@@ -8,6 +8,11 @@
       <f7-icon f7="square_list_fill" />
       <span class="app-tab-label">Завдання</span>
     </f7-link>
+    <!-- Додаткове завдання 5: сторінка «Налаштування» -->
+    <f7-link href="/settings/" :class="{ 'app-link-active': active === 'settings' }">
+      <f7-icon f7="gear_alt_fill" />
+      <span class="app-tab-label">Налаштування</span>
+    </f7-link>
     <f7-link href="/about/" :class="{ 'app-link-active': active === 'about' }">
       <f7-icon f7="info_circle_fill" />
       <span class="app-tab-label">Про застосунок</span>
